@@ -36,3 +36,31 @@ then we have to convert it in char [] ary then o0nly we can short it.
        
         return sorteds.equals(sortedt);
         return Arrays.toString(ss).equals(Arrays.toString(tt));
+
+
+        //  // myMap[currStr].push_back(strs[i])
+            map.putIfAbsent(sortedStr, new ArrayList<>());
+            map.get(sortedStr).add(strs[i]);
+
+
+             f1[sa-'a']++;
+            f2[st-'a']++;
+
+     // putting the frequency in the array
+      Map<Integer>IdxMap=new HashMap<>();
+        int n=arr.length;
+       for (int i = 0; i < n; i++) {
+          idxMap.put(arr[i], i);
+      }
+
+
+
+
+
+
+
+
+
+
+
+
