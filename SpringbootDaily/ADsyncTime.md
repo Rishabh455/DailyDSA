@@ -42,3 +42,27 @@ If interviewer asks “How did saveAll improve performance?”, say:
 
 “Earlier 10,000 separate INSERT/UPDATE queries were executed.
 With batching, multiple records were grouped into fewer DB calls, reducing network and transaction overhead.”
+
+
+
+So we had 630K+ employees in Active Directory, and our sync process was running every few hours — pulling all of them every single time, processing sequentially, and saving to DB one by one. It was taking close to 30 minutes, which was unacceptable.
+
+
+I approached it in two layers.
+
+
+First — reduce the data itself.
+I realized we were fetching 630K users even when maybe only 1-2K had actually changed. So I introduced a whenChanged filter in the LDAP query — AD stores a modification timestamp on every user object. We started storing our last successful sync timestamp in the DB, and every sync cycle only fetched users modified after that point. Instantly, instead of 630K records, we were dealing with a few hundred to a few thousand on a typical run.
+
+
+Second — process that data faster.
+Even the delta set needed to be handled efficiently. So I introduced ExecutorService with a fixed thread pool of 20 threads, partitioned users department-wise, and each thread handled its own batch independently — parallel LDAP fetches running simultaneously instead of sequentially.
+For memory, I added LDAP paging — fetching in chunks of 500 instead of loading everything at once.
+For DB, I replaced individual saves with JPA saveAll() with Hibernate batch config — bulk upserts instead of 630K individual round-trips.
+And I added @Retryable on LDAP calls so transient timeouts wouldn't crash the entire sync.
+
+
+Result — 30 minutes down to 5 minutes.
+
+
+But honestly the bigger win was the whenChanged filter — that eliminated 99% of unnecessary work before any code even ran. The multithreading made the remaining work fast. Both together gave us the result."
