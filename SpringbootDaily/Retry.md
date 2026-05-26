@@ -18,8 +18,8 @@ Client Request
            (Retry 2-3 times)
                     |
                     +---- Success ----> [ Response Returned ]
-                    |
-                    +---- Still Failing ---->
+                    |DF
+                    +--- Still Failing ---->
                                    |
                                    v
                          [ Circuit Breaker OPEN ]
