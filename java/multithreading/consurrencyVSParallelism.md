@@ -84,7 +84,7 @@ Both tasks happen at the same time.
 ```java
 ExecutorService executor =
         Executors.newFixedThreadPool(2);
-
+ExecutorService executor= Executors.newFixedThreadPool(2);
 executor.submit(task1);
 executor.submit(task2);
 ```
