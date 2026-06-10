@@ -101,7 +101,7 @@ Interview favorite.
 Har Java object ke paas intrinsic lock (monitor) hota hai.
 
 ```java
-synchronized(obj) {
+synchronized(obj 2) {
 }
 ```
 
