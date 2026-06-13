@@ -233,3 +233,118 @@ whenComplete()
 # One-Line Interview Summary
 
 CompletableFuture is the preferred modern Java asynchronous programming API because it provides non-blocking execution, task chaining, callback processing, and exception handling, making it more powerful than Future.
+-----------------------------------------------------------------------------------------------------------
+Ek simple real-world example lete hain: **Order Processing System**
+
+* `supplyAsync()` → Non-blocking execution
+* `thenApply()` → Task chaining
+* `thenAccept()` → Callback processing
+* `exceptionally()` → Exception handling
+* `thenCombine()` → Combining multiple async tasks
+
+```java
+import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureDemo {
+
+    public static void main(String[] args) {
+
+        // Async Task 1: Fetch User
+        CompletableFuture<String> userFuture =
+                CompletableFuture.supplyAsync(() -> {
+                    sleep(2000);
+                    System.out.println("Fetching User...");
+                    return "Rishabh";
+                });
+
+        // Async Task 2: Fetch Order
+        CompletableFuture<String> orderFuture =
+                CompletableFuture.supplyAsync(() -> {
+                    sleep(3000);
+                    System.out.println("Fetching Order...");
+                    return "Laptop";
+                });
+
+        // Task Chaining + Exception Handling
+        CompletableFuture<String> processedUser =
+                userFuture
+                        .thenApply(user -> {
+                            System.out.println("Processing User...");
+                            return user.toUpperCase();
+                        })
+                        .exceptionally(ex -> {
+                            System.out.println("Error: " + ex.getMessage());
+                            return "DEFAULT_USER";
+                        });
+
+        // Combine Multiple Async Tasks
+        CompletableFuture<String> finalResult =
+                processedUser.thenCombine(orderFuture,
+                        (user, order) ->
+                                "User: " + user + " ordered " + order);
+
+        // Callback Processing
+        finalResult.thenAccept(System.out::println);
+
+        System.out.println("Main thread is free...");
+
+        // Wait only for demo
+        finalResult.join();
+    }
+
+    private static void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Execution Flow
+
+```text
+Main Thread
+     |
+     |---- supplyAsync(User) ---------
+     |                                |
+     |---- supplyAsync(Order) ------  |
+                                      |
+Fetching User...                      |
+     |                                |
+thenApply() -> RISHABH               |
+                                      |
+Fetching Order... --------------------
+                                      |
+thenCombine()
+(User + Order)
+      |
+thenAccept()
+      |
+Print Result
+```
+
+### Mapping to Features
+
+| Feature                | Code              |
+| ---------------------- | ----------------- |
+| Non-blocking Execution | `supplyAsync()`   |
+| Task Chaining          | `thenApply()`     |
+| Callback Processing    | `thenAccept()`    |
+| Exception Handling     | `exceptionally()` |
+| Combining Tasks        | `thenCombine()`   |
+
+Output:
+
+```text
+Main thread is free...
+Fetching User...
+Processing User...
+Fetching Order...
+User: RISHABH ordered Laptop
+```
+
+Interview me agar koi puche **"Why CompletableFuture over Future?"** to ek line:
+
+> `Future` sirf result la sakta hai (`get()` se blocking), jabki `CompletableFuture` result aane ke baad automatically next task execute, combine, callback aur exception handling kar sakta hai bina main thread ko block kiye.

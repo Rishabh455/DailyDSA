@@ -378,9 +378,6 @@ Callable<PasswordResetResult> task = () -> {
     }
 };
 
-Future<PasswordResetResult> future =
-        executor.submit(task);
-```
 
 ---
 
