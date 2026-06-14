@@ -53,3 +53,12 @@ jakarta.servlet.Filter
 ```
 
 > Overall, the migration mainly involved updating deprecated APIs, moving to component-based security configuration, fixing LDAP integration compatibility issues, and adapting the application to the new Spring Security 6 standards.”
+--------------------read this directly
+Security 5 → 6 Migration:
+
+WebSecurityConfigurerAdapter → SecurityFilterChain
+antMatchers() → requestMatchers()
+javax.* → jakarta.*
+Updated JWT Filters
+Updated LDAP Config
+CSRF & Session Config Changes

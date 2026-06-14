@@ -245,6 +245,32 @@ public class JwtAuthFilter
 }
 ```
 
+--------------------------------------------
+1. Get Authorization Header
+
+2. Check:
+   Header exists?
+   Starts with "Bearer "?
+
+3. Extract JWT Token
+
+4. Extract Username from Token
+
+5. Check:
+   Username exists?
+   User not already authenticated?
+
+6. Load User from Database
+
+7. Validate Token
+
+8. If Token Valid:
+      Create Authentication Object
+      Set Authentication in SecurityContext
+
+9. Continue Filter Chain
+----------------------------------------------
+
 ---
 
 # Security Config (Most Asked)
@@ -281,6 +307,62 @@ public class SecurityConfig {
     }
 }
 ```
+-------------------------------------------------------
+@Configuration
+→ Marks security configuration class
+
+@EnableWebSecurity
+→ Enables Spring Security
+
+@EnableMethodSecurity
+→ Enables @PreAuthorize, @PostAuthorize
+
+SecurityFilterChain()
+→ Main security configuration method
+
+csrf().disable()
+→ Disable CSRF for JWT APIs
+
+sessionCreationPolicy(STATELESS)
+→ No server-side session
+
+requestMatchers("/auth/**").permitAll()
+→ Login/Register APIs are public
+
+anyRequest().authenticated()
+→ All other APIs are secured
+
+addFilterBefore(jwtFilter,...)
+→ Validate JWT before authentication filter
+
+http.build()
+→ Create Security Filter Chain
+
+-------------------------------------------------------
+
+###
+SecurityConfig:
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+
+SecurityFilterChain:
+Disable CSRF
+→ Stateless
+→ Permit Login APIs
+→ Secure Remaining APIs
+→ Add JWT Filter
+→ Build Chain
+
+JwtAuthFilter:
+Get Token
+→ Get Username
+→ Load User
+→ Validate Token
+→ Set Authentication
+→ Continue Request
+
+###
 
 ---
 
