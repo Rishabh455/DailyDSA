@@ -66,14 +66,35 @@ Declarative way to wrap a method in a database transaction without writing manua
 
 ## 2.2 Key Attributes
 
-| Attribute | Default | Meaning |
-|---|---|---|
-| `readOnly` | `false` | `true` = method only does SELECTs; throws error if you try INSERT/UPDATE/DELETE |
-| `propagation` | `REQUIRED` | How this transaction relates to an existing one |
-| `isolation` | `DEFAULT` | DB-level visibility rules between concurrent transactions |
-| `rollbackFor` | unchecked exceptions | Specify which exceptions trigger rollback |
-| `noRollbackFor` | — | Exceptions that should NOT trigger rollback |
+@Transactional important attributes:
 
+1. readOnly (default = false)
+   - false → Full transaction (SELECT, INSERT, UPDATE, DELETE allowed)
+   - true → Used for read operations only.
+   - Improves performance by telling Spring/DB that no data modification is expected.
+
+2. propagation (default = REQUIRED)
+   - Decides how the current transaction behaves with an existing transaction.
+   - REQUIRED → Join existing transaction, otherwise create a new one.
+   - REQUIRES_NEW → Always create a new transaction.
+
+3. isolation (default = DEFAULT)
+   - Defines how one transaction can see data changes made by another transaction.
+   - Helps avoid concurrency issues like Dirty Read, Non-Repeatable Read, and Phantom Read.
+   - Commonly used: READ_COMMITTED.
+
+4. rollbackFor
+   - Specifies which exceptions should trigger transaction rollback.
+   - By default, Spring rolls back only on unchecked exceptions (RuntimeException).
+
+5. noRollbackFor
+   - Specifies exceptions for which rollback should NOT happen.
+   - Transaction will commit even if that exception occurs.
+readOnly = What operations are allowed
+propagation = Which transaction to use
+isolation = How transactions see each other's data
+rollbackFor = When to rollback
+noRollbackFor = When NOT to rollback
 ## 2.3 Internal Working — Proxy/AOP Mechanism
 
 **Pseudocode of what Spring generates internally:**
@@ -241,7 +262,32 @@ placeOrder(orderRequest):
 logAuditDetails(order, action):
     auditLog.save(order, action, timestamp)  // commits independently
 ```
+placeOrder()
 
+T1 Start
+│
+├── saveOrder()           ✅
+├── updateInventory()     ✅
+│
+├── logAudit()
+│      │
+│      ├── Suspend T1
+│      │
+│      ├── T2 Start
+│      ├── saveAudit()
+│      ├── T2 Commit      ✅
+│      │
+│      └── Resume T1
+│
+└── Exception
+
+T1 Rollback ❌
+
+Final Result:
+
+Order       ❌
+Inventory   ❌
+Audit Log   ✅
 ### A. Interview Answer
 > "REQUIRES_NEW always starts a fresh, independent transaction — if a transaction is already running, it gets suspended until the new one finishes. This is used when you need an operation's outcome to persist regardless of the outer transaction's result — classic example is audit logging or notification tracking. Even if the main order placement rolls back, the audit log entry recording the failure remains committed."
 
@@ -438,6 +484,41 @@ getRecommendations(customerId):
 | NOT_SUPPORTED | Runs without txn | Suspends existing | No | Product recommendations (pure read) |
 | SUPPORTS | Doesn't enforce | Joins if exists, else none | No | Fetching customer details (flexible) |
 | NESTED | Savepoint-based child | Rolls back independently (mostly) | No | ⚠️ Not supported in JPA/Hibernate |
+
+
+| Propagation       | Existing Transaction?    | No Transaction?         | Typical Use Case          |
+| ----------------- | ------------------------ | ----------------------- | ------------------------- |
+| **REQUIRED**      | Join Existing            | Create New              | Normal CRUD Operations    |
+| **REQUIRES_NEW**  | Suspend Old + Create New | Create New              | Audit Logs, Error Logs    |
+| **MANDATORY**     | Join Existing            | Exception ❌             | Payment Processing Step   |
+| **NEVER**         | Exception ❌              | Run Normally            | Notifications, SMS, Email |
+| **NOT_SUPPORTED** | Suspend Existing         | Run Normally            | Recommendations, Reports  |
+| **SUPPORTS**      | Join Existing            | Run Without Transaction | Read Operations           |
+
+placeOrder()
+
+T1 Start
+│
+├── saveOrder()                 [REQUIRED]
+│      → T1 join
+│
+├── getCustomerDetails()        [SUPPORTS]
+│      → T1 join
+│      (T1 na hota to normal run karta)
+│
+├── logAudit()                  [REQUIRES_NEW]
+│      │
+│      ├── Suspend T1
+│      ├── T2 Start
+│      ├── saveAudit()
+│      ├── T2 Commit ✅
+│      └── Resume T1
+│
+└── RuntimeException
+
+T1 Rollback ❌
+
+
 
 ---
 

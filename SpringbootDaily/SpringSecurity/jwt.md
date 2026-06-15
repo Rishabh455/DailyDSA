@@ -1,5 +1,20 @@
 # JWT Authentication Flow in Spring Security (Easy + Interview Ready)
 JWT consists of three parts: Header, Payload, and Signature. Header contains algorithm details, payload contains claims/user data, and signature is used to verify integrity and authenticity of the token.
+
+| Part          | Kya Store Hota Hai?                                | Example                                         | Purpose                                         | Important Point                                       |
+| ------------- | -------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------- |
+| **Header**    | Token metadata                                     | `alg: HS256`, `typ: JWT`                        | Batata hai token kaise sign hua hai             | Authentication data nahi hota                         |
+| **Payload**   | User information (Claims)                          | `sub: rishabh`, `role: ADMIN`, `exp: 123456789` | User ki details carry karta hai                 | **Encrypted nahi hota**, sirf Base64 encoded hota hai |
+| **Signature** | Header + Payload + Secret Key se generate hota hai | Generated Hash                                  | Token verify karta hai ki tampering hui ya nahi | Sabse important security part                         |
+
+Base64(Header)
+      +
+Base64(Payload)
+      +
+Secret Key
+      ↓
+   Signature
+
 > “In modern Spring Boot applications, we usually use JWT-based authentication to make the application stateless and scalable.
 
 > First, the user logs in using username and password. The login request goes through Spring Security’s `UsernamePasswordAuthenticationFilter`.
