@@ -1,19 +1,59 @@
 # JWT Authentication Flow in Spring Security (Easy + Interview Ready)
-JWT consists of three parts: Header, Payload, and Signature. Header contains algorithm details, payload contains claims/user data, and signature is used to verify integrity and authenticity of the token.
+# JWT (JSON Web Token) - Interview Cheat Sheet
 
-| Part          | Kya Store Hota Hai?                                | Example                                         | Purpose                                         | Important Point                                       |
-| ------------- | -------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------- |
-| **Header**    | Token metadata                                     | `alg: HS256`, `typ: JWT`                        | Batata hai token kaise sign hua hai             | Authentication data nahi hota                         |
-| **Payload**   | User information (Claims)                          | `sub: rishabh`, `role: ADMIN`, `exp: 123456789` | User ki details carry karta hai                 | **Encrypted nahi hota**, sirf Base64 encoded hota hai |
-| **Signature** | Header + Payload + Secret Key se generate hota hai | Generated Hash                                  | Token verify karta hai ki tampering hui ya nahi | Sabse important security part                         |
+## JWT Structure
 
+A JWT consists of **3 parts**:
+
+```text
+Base64(Header).Base64(Payload).Signature
+```
+
+---
+
+## JWT Components
+
+| Part          | Stores                                | Example                                         | Purpose                                        | Interview Point                        |
+| ------------- | ------------------------------------- | ----------------------------------------------- | ---------------------------------------------- | -------------------------------------- |
+| **Header**    | Token metadata                        | `alg: HS256`, `typ: JWT`                        | Specifies the signing algorithm and token type | Does **not** contain user information  |
+| **Payload**   | User data (Claims)                    | `sub: rishabh`, `role: ADMIN`, `exp: 123456789` | Carries user identity and claims               | **Not encrypted**, only Base64 encoded |
+| **Signature** | Hash of Header + Payload + Secret Key | Generated Hash                                  | Verifies token integrity and authenticity      | Prevents token tampering               |
+
+---
+
+## Signature Generation
+
+```text
 Base64(Header)
       +
 Base64(Payload)
       +
 Secret Key
       ↓
-   Signature
+HMACSHA256(...)
+      ↓
+Signature
+```
+
+---
+
+## Important Interview Points
+
+* JWT has **3 parts:** Header, Payload, Signature.
+* **Header** contains metadata like signing algorithm (`HS256`) and token type (`JWT`).
+* **Payload** contains claims such as user ID, username, role, and expiry time.
+* **Payload is NOT encrypted**; it is only Base64 encoded, so anyone can decode it.
+* **Never store sensitive information** (passwords, credit card numbers, etc.) in the payload.
+* **Signature** is generated using the Header, Payload, and Secret Key.
+* During validation, the server regenerates the signature using its Secret Key.
+* If the generated signature matches the received signature, the token is valid; otherwise, it has been tampered with.
+
+---
+
+## 30-Second Interview Answer
+
+> "JWT consists of three parts: Header, Payload, and Signature. The Header contains metadata like the signing algorithm and token type. The Payload contains user claims such as user ID, role, and expiry time. The Signature is generated using the Base64-encoded Header, Base64-encoded Payload, and a Secret Key. It is used to verify the token's integrity and authenticity. One important point is that the Payload is **not encrypted**, only Base64 encoded, so sensitive information should never be stored in it."
+
 
 > “In modern Spring Boot applications, we usually use JWT-based authentication to make the application stateless and scalable.
 

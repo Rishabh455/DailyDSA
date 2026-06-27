@@ -162,4 +162,62 @@ It publishes events that listeners can consume.
 * **Kafka/RabbitMQ** → Communication between services or reliable asynchronous processing.
 * **ApplicationEventPublisher + @EventListener** → Event-driven communication inside the same Spring application.
 
-Ye teeno concepts interview me aksar ek dusre ke saath compare karne ko bolte hain. Ye distinction yaad rakhna.
+### Interview Answer (30–45 seconds)
+
+> "When there are multiple beans of the same type, Spring gets confused about which bean to inject and throws a `NoUniqueBeanDefinitionException`.
+>
+> We can resolve this in two ways:
+>
+> 1. **`@Qualifier`** – Used to specify the exact bean to inject.
+> 2. **`@Primary`** – Marks one bean as the default, so Spring injects it automatically when no `@Qualifier` is provided.
+>
+> **`@Qualifier` has higher priority than `@Primary`.**"
+
+---
+
+### Code Example
+
+```java
+public interface PaymentService {
+    void pay();
+}
+```
+
+```java
+@Component("upi")
+class UpiPaymentService implements PaymentService { }
+
+@Component("card")
+@Primary
+class CardPaymentService implements PaymentService { }
+```
+
+#### Using `@Qualifier`
+
+```java
+@Autowired
+@Qualifier("upi")
+private PaymentService paymentService;
+```
+
+➡️ Injects **UpiPaymentService**.
+
+#### Using `@Primary`
+
+```java
+@Autowired
+private PaymentService paymentService;
+```
+
+➡️ Injects **CardPaymentService** because it is marked `@Primary`.
+
+---
+
+### One-line Difference
+
+* **`@Qualifier`** → *Choose a specific bean.*
+* **`@Primary`** → *Set the default bean.*
+
+💡 **Interview tip:** End with:
+
+> "If both `@Qualifier` and `@Primary` are present, Spring always gives preference to `@Qualifier`."
