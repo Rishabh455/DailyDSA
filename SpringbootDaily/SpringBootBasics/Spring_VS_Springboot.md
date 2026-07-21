@@ -481,4 +481,3 @@ Less Boilerplate
 Business Logic
 ```
 
-If you remember just this flow, you can reconstruct a strong 3–5 minute answer in almost any Spring Boot interview without memorizing a script. This is the exact framework many experienced Java developers use during interviews.

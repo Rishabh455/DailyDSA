@@ -36,7 +36,114 @@ In a real-world scenario, imagine a database connection pool bean. During
 initialization, it establishes connections. During destroy, it closes them cleanly. That's
 lifecycle management in action.
 
+-------------------------------
+# 3️⃣ What is the Spring Bean Lifecycle?
 
+A **Spring Bean** is any object managed by the **Spring IoC container**.
+
+In our Password Management System, beans include:
+
+* `PasswordService`
+* `OtpService`
+* `OtpRepository`
+* `LdapService`
+
+The lifecycle works like this:
+
+### 1️⃣ Bean Creation
+
+Spring creates the object when the application starts.
+
+### 2️⃣ Dependency Injection
+
+Spring injects dependencies.
+
+Example:
+
+```
+PasswordService → OtpRepository injected
+PasswordService → LdapService injected
+```
+
+### 3️⃣ Initialization
+
+If we define `@PostConstruct`, Spring executes it after dependencies are injected.
+
+Example:
+
+```java
+@PostConstruct
+public void init(){
+   log.info("Password service initialized");
+}
+```
+
+### 4️⃣ Bean Ready
+
+Now the bean is available for use in controllers and services.
+
+### 5️⃣ Destruction
+
+When the application shuts down, `@PreDestroy` methods run.
+
+So the flow is:
+
+```
+Bean Creation
+↓
+Dependency Injection
+↓
+@PostConstruct
+↓
+Bean Ready
+↓
+@PreDestroy
+```
+
+--------------------------------
+Application Starts
+        │
+        ▼
+1. Bean Instantiation
+   → Spring creates the object (Constructor)
+
+        │
+        ▼
+2. Dependency Injection
+   → @Autowired dependencies are injected
+
+        │
+        ▼
+3. Aware Interfaces (Optional)
+   → BeanNameAware
+   → ApplicationContextAware
+
+        │
+        ▼
+4. BeanPostProcessor (Before Init)
+   → postProcessBeforeInitialization()
+
+        │
+        ▼
+5. Initialization
+   → @PostConstruct
+   → afterPropertiesSet() (InitializingBean)
+   → Custom initMethod()
+
+        │
+        ▼
+✅ Bean Ready to Use
+
+        │
+        ▼
+Application Shutdown
+
+        │
+        ▼
+6. Destruction
+   → @PreDestroy
+   → destroy() (DisposableBean)
+   → Custom destroyMethod()
 ----------------------------------------------------------------------------------------------------
 For a **3-year Spring Boot developer**, ye Bean Lifecycle ke sabse important interview questions hain:
 
