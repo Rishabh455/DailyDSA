@@ -299,6 +299,11 @@ DENSE_RANK() OVER(ORDER BY salary DESC) RankNo
 FROM Employee;
 ```
 
+Salary:       100   90   90   80
+RANK:           1    2    2    4
+DENSE_RANK:     1    2    2    3
+ROW_NUMBER:     1    2    3    4
+
 ---
 
 ## 27. Find Top 3 highest paid employees
