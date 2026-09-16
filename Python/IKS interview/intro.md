@@ -1,17 +1,13 @@
-Good morning, and thank you for giving me the opportunity to introduce myself.
+I have around 3 years of experience at TCS as a Python Full Stack Developer, working on enterprise banking applications for Saudi National Bank.
 
-I’m Rishabh Chourasia, and I have around 3 years of experience in software development. Currently, I’m working with Tata Consultancy Services as a System Engineer, primarily as a Python Full Stack Developer.
+My experience has mainly been across two key systems.
 
-My core expertise is in **Python, FastAPI, Flask, REST APIs, Pydantic, SQL, and React.js**, along with JavaScript and TypeScript. I have hands-on experience in developing APIs, integrating frontend and backend services, working with databases, implementing validations and business logic, testing, and resolving UAT and production issues.
+The first is a Digital Customer Onboarding and KYC platform, where I worked across the backend, frontend, and database layers. The system handles the complete customer onboarding journey — from application submission and document upload to OCR, data extraction, KYC verification, AML and risk checks, and finally arriving at an APPROVED, REJECTED, or REVIEW_REQUIRED decision.
 
-Currently, I’m working on an **enterprise banking project for Saudi National Bank through TCS**. One of the key modules I have worked extensively on is **Digital Onboarding, KYC, and Document Ingestion**.
+On this project, I worked mainly with Python, FastAPI, Flask, Pydantic, REST APIs, SQL, and React with TypeScript. My responsibilities included developing and integrating APIs, implementing request validations and business logic, handling database operations, integrating Azure AI Document Intelligence for OCR and document field extraction, and resolving UAT and production issues. I also delivered 30+ business enhancements as part of this platform.
 
-The workflow starts when a customer submits their onboarding application and uploads the required documents through the React-based application. These requests are handled by Python-based microservices through REST APIs. The documents are securely stored, while their metadata is maintained in the database. We use **Azure AI Document Intelligence** for document classification, OCR, and extracting relevant fields from the documents. The extracted information then goes through the KYC and verification workflow, where customer data, document details, and verification results are validated to determine whether the application should be **approved, rejected, or sent for further review**.
+Currently, I’m also working on a Real-Time Fraud Detection and Credit Risk Scoring Engine. Here, my primary focus is on the Python and FastAPI service layer. The service receives transaction data, validates and prepares the required features, integrates with the ML scoring component, and returns a real-time APPROVE, REVIEW, or BLOCK decision. Since this is a real-time system, I also focus on exception handling, API performance, reliability, and keeping the processing latency low.
 
-From my side, I have been involved in **API development and integration, request validation, business logic, database operations, document-processing workflows, testing, and resolving UAT and production issues**. This has given me good exposure to working with **microservices and end-to-end enterprise application workflows**.
+So overall, my experience has given me strong exposure to Python backend development, FastAPI and Flask, REST APIs, microservices, SQL, React integration, AI-based document processing, and real-time risk and fraud systems.
 
-Along with this, I’m currently working on a **Real-Time Fraud Detection and Credit Risk Scoring Engine**, which is in the development phase. My primary responsibility here is on the **Python and FastAPI service layer**, including API development, Pydantic-based validation, exception handling, business logic, and integration with the risk-scoring components.
-
-Overall, I would describe myself as a **full-stack developer with stronger backend expertise in Python and FastAPI**, and I’m comfortable working across APIs, microservices, databases, frontend integration, and enterprise banking applications.
-
-Thank you.
+I would describe myself as a full-stack developer with stronger backend expertise in Python and FastAPI, and I’m comfortable working across the complete application lifecycle — from API development and database operations to frontend integration, testing, and production support.

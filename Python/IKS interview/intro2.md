@@ -1,0 +1,6 @@
+"I'm a Python full-stack developer with 3+ years at TCS, working on the Saudi National Bank account. My work sits across two connected systems.
+>
+> The first is a **Digital Customer Onboarding & KYC platform** — a microservices system where a customer applies, uploads identity documents, we run OCR and field extraction using Azure AI Document Intelligence, cross-verify that against onboarding data, run identity verification and AML/risk checks, and the system arrives at APPROVED, REJECTED, or REVIEW_REQUIRED. I worked across the stack here — FastAPI/Flask services, Pydantic-based API contracts, React/TypeScript frontend, and SQL for application and document metadata — and shipped 30+ business enhancements on it.
+>
+> The second, which I'm currently on, is a **real-time fraud detection and credit risk scoring engine** — a FastAPI service layer that takes transaction data, prepares features, calls into an ML scoring component, and returns an APPROVE/REVIEW/BLOCK decision, all under tight latency constraints since it's real-time.
+Along the way I've leaned heavily into AI-assisted engineering — I'm Microsoft-certified in GitHub Copilot (GH-300 and GH-600), and I've used Copilot, Claude, and Cursor across 100+ dev tasks, plus hands-on work with RAG and prompt engineering.

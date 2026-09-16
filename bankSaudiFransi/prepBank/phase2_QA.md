@@ -1,0 +1,5 @@
+"Why did you separate these capabilities into microservices instead of keeping everything inside onboarding?"
+You can answer:
+"The main reason is that the business capabilities have different ownership, lifecycle, scaling and failure characteristics. For example, Address Verification encapsulates the external Saudi Post dependency, so isolating that integration keeps provider-specific failures and logic within a dedicated boundary. Identity Verification is a distinct capability that may need independent scaling, deployment and potentially reuse across other workflows. IAM is separated because identity and access management is a platform-level responsibility rather than onboarding-specific business logic. AML is also a distinct compliance capability and can be processed asynchronously after onboarding reaches the appropriate state. OTP has its own high-frequency and security-related concerns such as verification, expiry and rate limiting.
+
+So the goal isn't simply to make every business step a microservice. The goal is to create meaningful service boundaries where capabilities can be independently owned, deployed, scaled and isolated."
